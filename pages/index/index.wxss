@@ -1,0 +1,30 @@
+/**index.wxss**/
+.container {
+  border: 1px solid red;
+  padding: 0;
+  width: 100px;
+  height: 100px;
+}
+
+ .userinfo {
+  position: absolute;
+} 
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+  border: 1px solid red;
+}
+
+
+.ball {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: red;
+  position: absolute;
+  left:0;
+  top:0;
+}
