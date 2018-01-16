@@ -76,46 +76,32 @@ Page({
     }
     
   },
-
-  reflex2: function (start, end , radius, duration, lines, animation){
-    lines = [
-      { start: { x: 0, y: 0 }, end: { x: 0, y: 100 } }, 
-      { start: { x: 0, y: 0 }, end: { x: 100, y: 0 } }, 
-      { start: { x: 100, y: 0 }, end: { x: 100, y: 100 } }, 
-      { start: { x: 0, y: 100 }, end: { x: 100, y: 100 } }
-      ];
-
-    for(let i in lines){
-      line = lines[i];
-      if(this.intersect(start, end, line.start, line.end)) {
-        
-      }
-    }
-    
-  },
+  
   //叉积 
   mult: function(a, b, c) {  
     return(a.x-c.x)*(b.y-c.y)-(b.x - c.x) * (a.y - c.y);  
   },  
 
   //aa, bb为一条线段两端点 cc, dd为另一条线段的两端点 相交返回true, 不相交返回false  
-  intersect(aa, bb, cc, dd) {  
-    if(max(aa.x, bb.x) < min(cc.x, dd.x)) {
+  intersect: function(aa, bb, cc, dd) {  
+    let max = Math.max;
+    let min = Math.min;
+    if(max(aa.x, bb.x) <= min(cc.x, dd.x)) {
       return false;
     }  
-    if (max(aa.y, bb.y) < min(cc.y, dd.y)) {
+    if (max(aa.y, bb.y) <= min(cc.y, dd.y)) {
       return false;
     }  
-    if (max(cc.x, dd.x) < min(aa.x, bb.x)) {
+    if (max(cc.x, dd.x) <= min(aa.x, bb.x)) {
       return false;
     }  
-    if (max(cc.y, dd.y) < min(aa.y, bb.y)) {
+    if (max(cc.y, dd.y) <= min(aa.y, bb.y)) {
       return false;
     }  
-    if (this.mult(cc, bb, aa) * this.mult(bb, dd, aa) < 0) {
+    if (this.mult(cc, bb, aa) * this.mult(bb, dd, aa) <= 0) {
       return false;
     }  
-    if (this.mult(aa, dd, cc) * this.mult(dd, bb, cc) < 0) {
+    if (this.mult(aa, dd, cc) * this.mult(dd, bb, cc) <= 0) {
       return false;
     }  
     return true;  
@@ -125,7 +111,11 @@ Page({
     console.log(start, end, duration)
     dotStart = {x: 0, y: 0}
     dotEnd = {x: 100, y: 100}
-    if(end.x  < dotStart.x){
+    let dot2 = { x: dotStart.x, y: dotEnd.y }
+    let dot3 = { x: dotEnd.x, y: dotStart.y }
+
+    if (this.intersect(start, end, dotStart, dot2)) {
+    // if(end.x  < dotStart.x){
       let ratio = (start.x - dotStart.x) / (start.x - end.x);
       let y = (end.y - start.y) * ratio + start.y;
       
@@ -140,7 +130,8 @@ Page({
         }, radius, duration - durationFirst, dotStart, dotEnd, animation ))
     }
 
-    if (end.x > dotEnd.x) {
+    // if (end.x > dotEnd.x) {
+    if (this.intersect(start, end, dot3, dotEnd)) {
       let ratio = (start.x - dotEnd.x) / (start.x - end.x);
       let y = (end.y - start.y) * ratio + start.y;
       let durationFirst = ratio * duration;
@@ -154,7 +145,8 @@ Page({
         }, radius, duration - durationFirst, dotStart, dotEnd, animation))
     }
 
-    if (end.y < dotStart.y) {
+    if (this.intersect(start, end, dotStart, dot3)) {
+    // if (end.y < dotStart.y) {
       let ratio = (start.y - dotStart.y) / (start.y - end.y);
       let x = (end.x - start.x) * ratio + start.x;
       let durationFirst = ratio * duration;
@@ -168,7 +160,8 @@ Page({
         }, radius, duration - durationFirst, dotStart, dotEnd, animation))
     }
 
-    if (end.y >  dotEnd.y) {
+    if (this.intersect(start, end, dot2, dotEnd)) {
+    // if (end.y >  dotEnd.y) {
       let ratio = (start.y - dotEnd.y) / (start.y - end.y);
       let x = (end.x - start.x) * ratio + start.x;
       let durationFirst = ratio * duration;
